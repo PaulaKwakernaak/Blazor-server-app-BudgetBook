@@ -23,7 +23,7 @@
             decimal amount = 0.00m;
             foreach(var item in mockDb)
             {
-                 amount = amount + item.Amount;
+                 amount += item.Amount;
             }
             return amount;
         }
