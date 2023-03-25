@@ -1,0 +1,94 @@
+﻿@page "/"
+@page "/budget"
+
+@using BudgetBook.Data;
+@inject BudgetBookService budgetBookService;
+
+
+<h3>Budget</h3>
+
+
+<form>
+    <div class="row">
+        <div class="col">
+            <label class="control-label">Description</label>
+            <input class="form-control" @bind="@newBudgetBook.Description"/>     
+        </div>
+        <div class="col">
+            <label class="control-label">Amount</label>
+            <input class="form-control" @bind="@newBudgetBook.Amount" />
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary mt-2" @onclick="CreateBudgetBook">Add</button>
+        </div>
+    </div>
+
+</form>
+
+<br/><hr/><br/>
+
+<div class="tableBox col-4">
+<table class="table table-stripied table-bordered">
+
+    <thead class="table-dark ">
+        <tr>
+            <th>
+                Description
+            </th>
+            <th>
+                Amount
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+            @foreach (BudgetBook budgetBook in allBudgetBooks)
+            {
+                <tr>
+                    <td>@budgetBook.Description</td>
+                    <td>@budgetBook.Amount</td>
+                </tr>
+            }
+
+                <tr class="border-3">
+                    <td class="bg-gradient bg-info">total amount</td>
+                    <td class="bg-gradient bg-info">€  @Amount</td>
+                </tr>
+            
+    </tbody>
+</table>
+ </div>
+
+ 
+
+
+@code {
+    List<BudgetBook> allBudgetBooks = new List<BudgetBook>();
+    BudgetBook newBudgetBook = new BudgetBook();
+    decimal Amount = 0.00m;
+
+    //get all BudgetBooks from the service
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        allBudgetBooks = await budgetBookService.GetAllBudgetBooks();
+        foreach( var item in allBudgetBooks)
+        {
+            Amount = Amount + item.Amount;
+        }
+    }
+
+    //add a new book to the list 
+    protected async void CreateBudgetBook()
+    {
+        await budgetBookService.AddBudgetBook(newBudgetBook);
+        Amount = Amount + newBudgetBook.Amount;
+    }
+
+   
+   
+
+
+}
