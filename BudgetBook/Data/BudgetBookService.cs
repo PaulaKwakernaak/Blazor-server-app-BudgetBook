@@ -18,7 +18,7 @@
             return mockDb;
         }
 
-        public async Task<decimal>  GetTotalAmount()
+        public async Task<decimal> GetTotalAmount()
         {
             decimal amount = 0.00m;
             foreach(var item in mockDb)
